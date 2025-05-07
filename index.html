@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Koleksi video menarik dengan thumbnail acak">
+    <title>Video Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 2.5em;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .grid-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+            aspect-ratio: 16/9;
+        }
+
+        .grid-item:hover {
+            transform: scale(1.03);
+            z-index: 1;
+        }
+
+        .grid-item a {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Video Gallery</h1>
+        </header>
+        <main>
+            <div class="grid" id="imageGrid"></div>
+        </main>
+    </div>
+
+    <script>
+        // Fungsi untuk memuat dan mengacak gambar
+        async function loadAndShuffleImages() {
+            try {
+                const response = await fetch('thumb.txt');
+                const data = await response.text();
+                const imageUrls = data.split('\n').filter(url => url.trim() !== '');
+                
+                // Mengacak array gambar
+                const shuffledUrls = imageUrls.sort(() => Math.random() - 0.5);
+                
+                const grid = document.getElementById('imageGrid');
+                
+                // Membuat elemen gambar
+                shuffledUrls.forEach(url => {
+                    const gridItem = document.createElement('div');
+                    gridItem.className = 'grid-item';
+                    
+                    const link = document.createElement('a');
+                    link.href = 'video.html';
+                    
+                    const img = document.createElement('img');
+                    img.src = url.trim();
+                    img.alt = 'Video thumbnail';
+                    
+                    link.appendChild(img);
+                    gridItem.appendChild(link);
+                    grid.appendChild(gridItem);
+                });
+            } catch (error) {
+                console.error('Error loading images:', error);
+            }
+        }
+
+        // Memuat gambar saat halaman dimuat
+        window.addEventListener('load', loadAndShuffleImages);
+    </script>
+</body>
+</html>
