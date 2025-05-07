@@ -1,0 +1,5 @@
+action
+comedy
+drama
+horror
+sci-fi
