@@ -42,8 +42,9 @@
             border-radius: 0px;
             transition: transform 0.3s ease;
             aspect-ratio: 16/9;
+            background: #222;
         }
-
+        
         .grid-item:hover {
             transform: scale(1.03);
             z-index: 1;
@@ -86,6 +87,38 @@
     </div>
 
     <script>
+      async function loadAndShuffleImages() {
+            try {
+                const response = await fetch('thumb.txt');
+                const data = await response.text();
+                const imageUrls = data.split('\n').filter(url => url.trim() !== '');
+                
+                const shuffledUrls = imageUrls.sort(() => Math.random() - 0.5);
+                const grid = document.getElementById('imageGrid');
+                
+                shuffledUrls.forEach(url => {
+                    const gridItem = document.createElement('div');
+                    gridItem.className = 'grid-item';
+                    
+                    const link = document.createElement('a');
+                    link.href = 'video.html';
+                    
+                    const img = document.createElement('img');
+                    img.src = url.trim();
+                    img.alt = 'Video thumbnail';
+                    img.loading = 'lazy'; // Tambahan lazy loading
+                    
+                    link.appendChild(img);
+                    gridItem.appendChild(link);
+                    grid.appendChild(gridItem);
+                });
+            } catch (error) {
+                console.error('Error loading images:', error);
+            }
+        }
+
+        window.addEventListener('load', loadAndShuffleImages);
+      
         // Fungsi untuk memuat dan mengacak gambar
         async function loadAndShuffleImages() {
             try {
